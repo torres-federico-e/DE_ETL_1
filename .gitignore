@@ -1,0 +1,9 @@
+# Standard
+.DS_Store
+
+# Environment
+.venv
+
+# Secrets
+.env.secrets
+.env*
