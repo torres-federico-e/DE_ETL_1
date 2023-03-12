@@ -1,12 +1,12 @@
-# ETL project 1: Financial ETL
-This ETL project serves as a real-world example of an actual ETL that tracks useful financial metrics from an unstructured source, such as an internal, unexposed API from Argentina's Central Bank (BCRA). The goal is to demonstrate the extraction and integration of useful financial metrics and data, as both a portfolio project and for personal use in making financial decisions.
+# <u>ETL project 1:</u> Financial ETL
+The goal of this ETL project is to provide a real-world example of an organized and extensible ETL process that tracks and integrates useful financial metrics from an actual official API source, such as the internal, unexposed API on Argentina's Central Bank web page (BCRA). The project demonstrates the extraction and integration of useful financial data, building time series data from selected sources onto a database for both portfolio purposes and personal use in making financial decisions.
 
 ## Objective:
 - Extract official USD/ARS exchange rate data from an official government source API and transform; parse, and clean data ready for storage. 
 - Integrate and embed it with other financial data sources, such as financial broker API source to include other financial  metrics.  
 - Store on local database with possible extension to Cloud storage.
 
-## Project structure
+## Project Template 1
 ```
 ├── README.md          <- The top-level README for developers using this project.
 ├── data
@@ -30,4 +30,40 @@ This ETL project serves as a real-world example of an actual ETL that tracks use
          ├── data_transform.py
          ├── data_sotrage.py
          └── data_visualization.py
+```
+
+
+## Project Template 2:
+```
+etl_project/
+|-- src/
+|   |-- __init__.py
+|   |-- data/
+|   |   |-- __init__.py
+|   |   |-- extract.py
+|   |   |-- transform.py
+|   |   |-- load.py
+|   |-- jobs/
+|   |   |-- __init__.py
+|   |   |-- job_1.py
+|   |   |-- job_2.py
+|   |-- models/
+|   |   |-- __init__.py
+|   |   |-- model_1.py
+|   |   |-- model_2.py
+|   |-- utils/
+|   |   |-- __init__.py
+|   |   |-- util_1.py
+|   |   |-- util_2.py
+|-- tests/
+|   |-- __init__.py
+|   |-- test_extract.py
+|   |-- test_transform.py
+|   |-- test_load.py
+|   |-- test_job_1.py
+|   |-- test_job_2.py
+|-- requirements.txt
+|-- setup.py
+|-- README.md
+|-- .gitignore
 ```
