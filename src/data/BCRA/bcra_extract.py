@@ -1,3 +1,5 @@
+
+
 #%% Data Extraction - Example script
 
 # url = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
@@ -132,6 +134,4 @@ res_extr = BCRA_extractor('2023-03-01', locator_tag='table', attr_filter={'id':'
 
 
 #%%
-with open('data_raw_bcra_api.html', 'wb') as f:
-    f.write(res)
-# %%
+
