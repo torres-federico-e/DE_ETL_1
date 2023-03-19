@@ -99,6 +99,13 @@ class BCRA:
             _parsed.append(parsed_html)
         return _parsed
             
+    def extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
+        '''Locates and extracts Exchange Rate tables from within BeautifulSoup parsed objects ('soups')'''
+        etag = self.page_elements_locators['tag']
+        eid = self.page_elements_locators['id']
+        rate_table = parsed_html.find(etag, {'id':eid})
+        return rate_table
+     
 #%%
 
 
