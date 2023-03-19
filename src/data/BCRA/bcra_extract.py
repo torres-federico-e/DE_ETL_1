@@ -16,6 +16,8 @@
 
 #%% Imports
 import requests
+import pandas as pd
+
 from datetime import datetime
 
 from typing import List, Dict
@@ -106,6 +108,12 @@ class BCRA:
         rate_table = parsed_html.find(etag, {'id':eid})
         return rate_table
      
+    def HTML_to_df(self, HTML_table_str: HTML_table_str):
+        '''Exports extracted individual table to Pandas Dataframe'''
+        return pd.read_html(str(HTML_table_str))
+    
+    
+    
 #%%
 
 
