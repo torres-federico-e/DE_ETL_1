@@ -43,7 +43,7 @@ responses = List[response]
 date = str
 dates = List[date]
 
-class BCRA:
+class BCRA_source:
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
     currency_code = {'EUR': '98', 'USD':'2'}
     
@@ -51,7 +51,7 @@ class BCRA:
     def __init__(self, date = None, start_date = None, end_date = None, 
                  currency = 'USD', locator_tag, attributes):
         
-        # if both extraction date  methods given: raise error
+        # case both date methods simultaneously specified
        if date &&  (start_date | end_date):
            raise DateRequestError
        else:   
