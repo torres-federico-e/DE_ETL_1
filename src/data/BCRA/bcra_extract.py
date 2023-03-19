@@ -16,6 +16,7 @@
 
 #%% Imports
 import requests
+from datetime import datetime
 
 #%% Exceptions definitions
 
@@ -55,6 +56,18 @@ class BCRA:
             # self.extract_locators = {'tag': locator_tag, **attributes} 
             # self.response_html = 
             # self.parsed_HTML = self.HTML_parse(HTML_responses)
+        
+    def get_date_list(start_date, end_date):
+        '''Calculates list of dates with format 'YYYY-MM-DD' 
+        '%Y-%m-%d' in datetime format string, compatible with BCRA API'''
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        dates = [datetime.strftime(start_date + timedelta(days=i), '%Y-%m-%d')
+                    for i in range((end_date - start_date).days + 1)]
+        return dates
+        
+        
+        
         
 from .data_models import BCRA_extractor
 # Use cases:
