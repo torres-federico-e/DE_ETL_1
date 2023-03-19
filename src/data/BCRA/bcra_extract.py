@@ -58,7 +58,7 @@ class BCRA:
                 self.date = date
                 self.dates = self.get_dates(start_date, end_date)
             except e:
-                print(f"Date parsing Error. Failed to parse dates \n\n\t{e}")
+                print(f"Date Error.\n{e}")
                 raise(e)
             
             # self.extract_locators = {'tag': locator_tag, **attributes} 
