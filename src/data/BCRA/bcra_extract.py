@@ -26,8 +26,6 @@ from typing import List, Dict
 
 #%% Exceptions definitions
 
-# Write an Error exception class that inherits from Exception, and that when called shows a custom error message
-
 class DateRequestError(Exception):
     '''Date Request method Error'''
     def __str__(self):
