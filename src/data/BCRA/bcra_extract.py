@@ -18,6 +18,9 @@
 import requests
 from datetime import datetime
 
+from typing import List, Dict
+
+
 #%% Exceptions definitions
 
 # Write an Error exception class that inherits from Exception, and that when called shows a custom error message
@@ -31,6 +34,11 @@ class DateRequestError(Exception):
 
 
 #%% Class definition
+
+response= str
+responses = List[response]
+date = str
+dates = List[date]
 
 class BCRA:
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
@@ -69,6 +77,23 @@ class BCRA:
         
         
         
+    def extract_dates_rates(dates:List[dates]) --> Dict[response]:
+        '''Makes API calls to BCRA API for the listed dates. 
+        Returns a Dictionary with dates as keys and responses as values.
+        * Return -> Dict[date:response]'''
+        responses = dict()
+        for date in dates:
+            payload = {'moneda': currency_code, 'fecha': date}
+            response = requests.post(self.url_endpoint, data=payload)
+            #Updates dictionary with new date content
+            responses = {**responses, date:response}
+        return responses
+            
+#%%
+
+
+
+
 from .data_models import BCRA_extractor
 # Use cases:
 
