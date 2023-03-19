@@ -68,7 +68,7 @@ class BCRA_source:
             # self.response_html = 
             # self.parsed_HTML = self.HTML_parse(HTML_responses)
         
-    def get_date_list(start_date, end_date):
+    def _get_date_list(start_date, end_date):
         '''Calculates list of dates with format 'YYYY-MM-DD' 
         '%Y-%m-%d' in datetime format string, compatible with BCRA API'''
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -102,14 +102,14 @@ class BCRA_source:
             _parsed.append(parsed_html)
         return _parsed
             
-    def extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
+    def _extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
         '''Locates and extracts Exchange Rate tables from within BeautifulSoup parsed objects ('soups')'''
         etag = self.page_elements_locators['tag']
         eid = self.page_elements_locators['id']
         rate_table = parsed_html.find(etag, {'id':eid})
         return rate_table
      
-    def HTML_to_df(self, HTML_table_str: HTML_table_str):
+    def _HTML_to_df(self, HTML_table_str: HTML_table_str):
         '''Exports extracted individual table to Pandas Dataframe'''
         return pd.read_html(str(HTML_table_str))
     
