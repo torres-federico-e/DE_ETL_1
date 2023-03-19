@@ -34,7 +34,7 @@ class DateRequestError(Exception):
 
 class BCRA:
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
-    currency_code = ('EUR': '98', 'USD':'2')
+    currency_code = {'EUR': '98', 'USD':'2'}
     
 
     def __init__(self, date = None, start_date = None, end_date = None, 
