@@ -89,6 +89,16 @@ class BCRA:
             responses = {**responses, date:response}
         return responses
             
+    def HTML_parse(HTML_responses, encoding:str = 'iso-8859-1'):
+        '''Parses response and returns BeautifulSoup parsed object from HTML response'''
+        _parsed = list()
+        for res in HTML_responses:
+            res = res.content
+            with open(res, encoding= encoding) as fp:
+                parsed_html = BeautifulSoup(fp.read(), 'html.parser')
+            _parsed.append(parsed_html)
+        return _parsed
+            
 #%%
 
 
