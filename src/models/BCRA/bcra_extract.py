@@ -62,7 +62,6 @@ class BCRAExtractor:
         
         # Define dates vars safely
         self.dates = self._get_date_list(date, start_date, end_date)
-        self.extract_locators = {'tag': locator_tag, **attributes} 
         self.response = self.extract_dates_rates(self.dates, self.currency_code['USD']) 
         # self.parsed_HTML = self.HTML_parse(self.response)
 
@@ -118,8 +117,10 @@ class BCRAExtractor:
 
 class BCRATransformer:
     '''Handles RAW HTML response transformation to 
-    Structured data for final data target'''       
-    def __init__(self, html_responses:Dict[responses]):
+    Structured data for final data target'''
+    
+    def __init__(self, html_responses:Dict[Responses], extract_filters = None):
+        self.extract_locators =  {'locator_tag':'table'} if extract_filters is None else extract_filters
         self.responses = html_responses
         self.parsed = self.html_parse(self.responses)
         self.tables = self._extract_tables(self.parsed)
