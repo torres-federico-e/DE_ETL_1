@@ -125,15 +125,19 @@ class BCRATransformer:
         self.tables = self._extract_tables(self.parsed)
         self.dfs = self.html_to_df(self.tables)
         
-            
-    def HTML_parse(self, html_response, encoding:str = 'iso-8859-1'):
-        '''Parses response and returns BeautifulSoup parsed object from HTML response'''
-        _parsed = list()
-        for res in html_response:
-            res = res.content
-            with open(res, encoding= encoding) as fp:
-                parsed_html = BeautifulSoup(fp.read(), 'html.parser')
-            _parsed.append(parsed_html)
+    def html_parse(self, html_responses, encoding:str = 'iso-8859-1', parser:str = 'html.parser'):
+        '''Parses RAW HTMLresponses per date received from Dict with 
+        Dates as keys and Raw Html responses as values.
+        Returns Dict of parsed BeautifulSoup objects
+        with dates as keys for further processing'''
+        # _parsed = list()
+        _parsed = dict()
+        for date, response in html_responses.items():            
+            response = response.content
+            with open(response, encoding= encoding) as fp:
+                parsed_html = BeautifulSoup(fp.read(), parser)
+            _parsed = {**_parsed, date:parsed_html}
+            # _parsed.append(parsed_html)
         return _parsed
             
     def _extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
