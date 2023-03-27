@@ -1,0 +1,46 @@
+LINK ADDRESS:
+  https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp
+
+
+HEADERS:
+  POST /publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp HTTP/1.1
+  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+  Accept-Encoding: gzip, deflate, br
+  Accept-Language: es-US,es-419;q=0.9,es;q=0.8,en;q=0.7
+  Cache-Control: no-cache
+  Connection: keep-alive
+  Content-Length: 39
+  Content-Type: application/x-www-form-urlencoded
+  Cookie: f5_cspm=1234; ASPSESSIONIDAEBTBRST=AGEFKEKCODLMAKOFGPGFBKKO; ASPSESSIONIDSWADRRRC=KEENMDGCOBCMMHKPDBFELHJE; _fbp=fb.2.1679257476142.1732439974; ASPSESSIONIDSWDCQRQC=EACPNKCDMEENLNMKEALCJEOF; _gid=GA1.3.1829246030.1679850688; _ga_MCSB9VWT23=GS1.1.1679850704.3.0.1679850714.50.0.0; _ga=GA1.3.26562866.1678636416; ASPSESSIONIDSEDRBDBR=JKEKPAAAJHCCHFMLMGEAFGNF; TS0128cbb5=01532640e84e5f473fd9ff3b6524f3f07ef5ffb9e1087a4e458d4b445c57f7fa43dd3af68a1588d9b2ae33b9d4ba954165a94c52e4add7fe26180f2d7332aca7fc5bdffe4d19815c2bb715efe3d7dff266aca9e12368cdd72850f5a0efd3e5cafc15702d448cbf282b0709f7fdafc8a21f5c8a4bc0f838e54aae7aafe45d22244ad928fd7cbf6f6d767b8dfdd96bdd41b50eee0219; _gat=1; TSbf986545027=08403d584cab200018aa221cd39a1f848693711a52ba764e1c717c244a6509cacbb1c0887ea58a6808f1533516113000831af1fb8e3e0f504106e6e5e8899053a80aa73d40f019c9c0b3cff06fba24289b8612efb3ab1059b57ccff4a85a62a5
+  Host: www.bcra.gob.ar
+  Origin: https://www.bcra.gob.ar
+  Pragma: no-cache
+  Referer: https://www.bcra.gob.ar/publicacionesestadisticas/tipo_de_cambio_minorista.asp
+  Sec-Fetch-Dest: document
+  Sec-Fetch-Mode: navigate
+  Sec-Fetch-Site: same-origin
+  Sec-Fetch-User: ?1
+  Upgrade-Insecure-Requests: 1
+  User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36
+  sec-ch-ua: "Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"
+  sec-ch-ua-mobile: ?0
+  sec-ch-ua-platform: "macOS"
+
+
+
+RESPONSE HEADERS: 
+  HTTP/1.1 200 OK
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Cache-Control: no-cache
+  Connection: close
+  Content-Type: text/html; charset=iso-8859-1
+  Pragma: no-cache
+  Content-Length: 247
+  Set-Cookie: TSbf986545027=08403d584cab2000447373fa70e04956097c455b7beb9e251a571e1837645ad1391b1fc46160a77508f3aec18e1130003b434f5befccc028953df5fedc5ca621576167958380516167c4ed35d5f2d48c3e5c321cc95d1dd23c9eccdb2656d619; Path=/
+
+
+
+RESPONSE: 
+  <html><head><title>Request Rejected</title></head><body>The requested URL was rejected. Please consult with your administrator.<br><br>Your support ID is: 18328873560361659732<br><br><a href='javascript:history.back();'>[Go Back]</a></body></html>
