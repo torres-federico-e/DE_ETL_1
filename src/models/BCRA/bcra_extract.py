@@ -51,11 +51,40 @@ class BCRAExtractor:
     currency_code = {'EUR': '98', 'USD':'2'}
 
     def __init__(self, date = None, start_date = None, end_date = None, locator_tag='table', **attributes):    
+        try: 
+            self.is_valid_date_request(date, start_date, end_date)
+            self.is_valid_date_format(date, start_date, end_date)    
+        except Exception as e:
+            print("Error while checking dates")
+            raise e
         
+        # Define dates vars safely
         self.dates = self._get_date_list(date, start_date, end_date)
         self.extract_locators = {'tag': locator_tag, **attributes} 
         self.response = self.extract_dates_rates(self.dates, self.currency_code['USD']) 
         # self.parsed_HTML = self.HTML_parse(self.response)
+
+    
+    def is_valid_date_request(self, date = None, start_date = None, end_date = None):
+        '''Validates date requests for API. Returns Boolean, True only for Valid requests'''
+        if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
+            raise DateRequestError
+        else:
+            pass
+        
+    def is_valid_date_format(self, date = None, start_date = None, end_date = None, datefmt='%Y-%m-%d'):
+        '''Validates date format for API. Returns Boolean, True only for Valid requests'''
+        try:
+            if date:
+                datetime.strptime(date, datefmt)
+            elif start_date and end_date:
+                datetime.strptime(start_date, datefmt)
+                datetime.strptime(end_date, datefmt)
+            else:
+                return False
+        except ValueError:
+            raise ValueError("Incorrect date specified. Please use format 'YYYY-MM-DD'")
+        return True
 
 
     def _get_date_list(self, date, start_date, end_date):
