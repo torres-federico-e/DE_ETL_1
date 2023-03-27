@@ -47,6 +47,9 @@ Parsed_HTML_tables =Dict[Dates:BeautifulSoup]
 FilteredTables = Dict[Dates:Parsed_HTML_tables] = str
 
 
+class DateRequest:
+    pass
+
 
 class BCRAExtractor:
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
