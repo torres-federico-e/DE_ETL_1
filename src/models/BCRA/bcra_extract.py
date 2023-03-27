@@ -39,11 +39,13 @@ class DateRequestError(Exception):
 # f5avr1354712366aaaaaaaaaaaaaaaa_cspm_ = IHCEKDFDOHJADMMGLBMDDODJJMBJEECBKPFLOCBMNBPABGANKBGILFFHDPAIMMBHKCFBFJLLDKLKPHBFDNFALNNBACKDBDFMFFIOLFKINHKOOKJEHJMIAKFLIGEECFGD
 # f5_cspm = IHCEKDFDOHJADMMGLBMDDODJJMBJEECBKPFLOCBMNBPABGANKBGILFFHDPAIMMBHKCFCFJLLAELKPHBFDNFALNNBCHKDBDFMFFIOLFKINHKOOKJEHJMIAKFLIGEECFGD
 
-response= str
-responses = List[response]
-date = str
-dates = List[date]
-HTML_table_str = str
+Response= str
+Responses = List[Response]
+Date = str
+Dates = List[Date]
+Parsed_HTML_tables =Dict[Dates:BeautifulSoup]
+FilteredTables = Dict[Dates:Parsed_HTML_tables] = str
+
 
 
 class BCRAExtractor:
@@ -64,14 +66,13 @@ class BCRAExtractor:
         self.response = self.extract_dates_rates(self.dates, self.currency_code['USD']) 
         # self.parsed_HTML = self.HTML_parse(self.response)
 
+
     
     def is_valid_date_request(self, date = None, start_date = None, end_date = None):
         '''Validates date requests for API. Returns Boolean, True only for Valid requests'''
         if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
             raise DateRequestError
-        else:
-            pass
-        
+            
     def is_valid_date_format(self, date = None, start_date = None, end_date = None, datefmt='%Y-%m-%d'):
         '''Validates date format for API. Returns Boolean, True only for Valid requests'''
         try:
@@ -86,7 +87,7 @@ class BCRAExtractor:
             raise ValueError("Incorrect date specified. Please use format 'YYYY-MM-DD'")
         return True
 
-
+    
     def _get_date_list(self, date, start_date, end_date):
         '''Calculates list of dates if Date Range extraction was specified with
         `start_date` and `end_date` and complying with date format 'YYYY-MM-DD'
@@ -100,9 +101,8 @@ class BCRAExtractor:
             return dates
         elif date:
             return [date]
-          
-    def extract_dates_rates(self, dates:List[dates] = None, currency_code=None):
-    # -> Dict[str:responses]:
+    
+    def extract_dates_rates(self, dates:List[Dates] = None, currency_code=None):
         '''Makes API calls to BCRA API for the listed dates. 
         Returns a Dictionary with dates as keys and responses as values.
         * Return -> Dict[date:response]'''
@@ -140,7 +140,7 @@ class BCRATransformer:
             # _parsed.append(parsed_html)
         return _parsed
 
-    def _extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
+    def _extract_tables(self, parsed_html: BeautifulSoup) -> Dict[Dates:Parsed_HTML_tables]: 
         '''Processes dates and extracts Exchange Rate tables from
         BeautifulSoup parsed HTML (the actual 'soups' elements)
         Returns a Dict with dates as keys and list of matching 
