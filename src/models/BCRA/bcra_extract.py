@@ -154,9 +154,16 @@ class BCRATransformer:
         return result_tables
 
 
-    def html_to_df(self, html_str_table: HTML_table_str):
-        '''Exports parsed 'soup' tables to Pandas Dataframe'''
-        return pd.read_html(str(html_str_table))
+    def html_to_df(self, date_tables: Dict[Dates:Parsed_HTML_tables]):
+        '''Process and exports parsed tables to Pandas Dataframe'''
+        final = dict()
+        for date, tables in date_tables.items():
+            table_list = []
+            for table in tables:
+                _df_table = pd.read_html(str(table))
+                table_list.append(_df_table)
+            final = {**final, date:table_list}
+        return final
     
     
 #%%
