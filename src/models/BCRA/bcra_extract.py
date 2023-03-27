@@ -108,9 +108,10 @@ class BCRAExtractor:
         * Return -> Dict[date:response]'''
         responses = dict()
         for date in dates:
+            # `date`: %Y-%m-%d format already for API request and Dict keys
             payload = {'moneda': currency_code, 'fecha': date}
             response = requests.post(self.url_endpoint, data=payload)
-            #Updates dictionary with new date content
+            # Extend dictionary with new keys content
             responses = {**responses, date:response}
         return responses
             
