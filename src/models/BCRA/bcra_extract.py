@@ -139,15 +139,20 @@ class BCRATransformer:
             _parsed = {**_parsed, date:parsed_html}
             # _parsed.append(parsed_html)
         return _parsed
-            
+
     def _extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
-        '''Locates and extracts Exchange Rate tables from 
-        within BeautifulSoup parsed objects (the actual 'soups' tables
-        ready for post-processing)'''
-        etag = self.page_elements_locators['tag']
-        eid = self.page_elements_locators['id']
-        rate_table = parsed_html.find(etag, {'id':eid})
-        return rate_table
+        '''Processes dates and extracts Exchange Rate tables from
+        BeautifulSoup parsed HTML (the actual 'soups' elements)
+        Returns a Dict with dates as keys and list of matching 
+        elements as values'''
+        etag = self.extract_locators['tag']
+        eid = self.extract_locators['id']
+        
+        for date, soup in parsed_html.items():
+            rate_table = soup.find(etag, {'id':eid})
+            result_tables = {**parsed_html, date:rate_table}
+        return result_tables
+
 
     def html_to_df(self, html_str_table: HTML_table_str):
         '''Exports parsed 'soup' tables to Pandas Dataframe'''
