@@ -114,6 +114,17 @@ class BCRAExtractor:
             # Extend dictionary with new keys content
             responses = {**responses, date:response}
         return responses
+
+
+class BCRATransformer:
+    '''Handles RAW HTML response transformation to 
+    Structured data for final data target'''       
+    def __init__(self, html_responses:Dict[responses]):
+        self.responses = html_responses
+        self.parsed = self.html_parse(self.responses)
+        self.tables = self._extract_tables(self.parsed)
+        self.dfs = self.html_to_df(self.tables)
+        
             
     def HTML_parse(self, html_response, encoding:str = 'iso-8859-1'):
         '''Parses response and returns BeautifulSoup parsed object from HTML response'''
@@ -126,14 +137,16 @@ class BCRAExtractor:
         return _parsed
             
     def _extract_tables(self, parsed_html: BeautifulSoup) -> HTML_table_str: 
-        '''Locates and extracts Exchange Rate tables from within BeautifulSoup parsed objects ('soups')'''
+        '''Locates and extracts Exchange Rate tables from 
+        within BeautifulSoup parsed objects (the actual 'soups' tables
+        ready for post-processing)'''
         etag = self.page_elements_locators['tag']
         eid = self.page_elements_locators['id']
         rate_table = parsed_html.find(etag, {'id':eid})
         return rate_table
 
-    def _HTML_to_df(self, html_str_table: HTML_table_str):
-        '''Exports extracted individual table to Pandas Dataframe'''
+    def html_to_df(self, html_str_table: HTML_table_str):
+        '''Exports parsed 'soup' tables to Pandas Dataframe'''
         return pd.read_html(str(html_str_table))
     
     
