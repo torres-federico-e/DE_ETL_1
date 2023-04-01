@@ -1,4 +1,7 @@
-# <u>ETL project 1:</u> Financial ETL
+
+![BCRA_Entrance](./img/bcra_banner_2_hi_res.jpg "BCRA_Entrance")
+
+#  Financial ETL - BCRA Data Ingestion
 Example of an extensible ETL process with Real-world data recollection. This process extracts and integrates data from the official backend API of Argentina's Central Bank institution (BCRA), an unexposed API source allowing easy collection and access of otherwise unaccessible data. The project demonstrates the extraction and integration of useful data from diverse financial sources into a valid schema and posterior storage into a database system.
 
 ## Objective:
