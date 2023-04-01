@@ -8,6 +8,6 @@
 .env.secrets
 .env*
 
-# Test files
-
+# Files
 src/bcra.ipynb
+structure.md
