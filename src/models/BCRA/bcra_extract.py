@@ -1,5 +1,6 @@
 
 #%% Data Extraction - Example script
+# --------------------------------------------------------
 
 # url = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
 # currency_code = '2'
@@ -15,29 +16,27 @@
 #     f.write(res)
 
 
+#%%   emulate main.py file for imports
+#----------------------------------------------------------
+import os
+
+if os.path.exists('../../../src'): 
+    os.chdir('../../../')
+
+
 #%% Imports
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
-
 from datetime import datetime, timedelta
-
 from typing import List, Dict
 
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 
-#%% Exceptions definitions
-
-class DateRequestError(Exception):
-    '''Date Request method Error'''
-    def __str__(self):
-        return "Inconsistent date extraction request specified. Please choose a Single date request, or a Date Range request via Start_Date and End_Date."
+from src.errors.bcra_errors import DateRequestError
 
 
 
 #%% Class definition
-
-# f5avr1354712366aaaaaaaaaaaaaaaa_cspm_ = IHCEKDFDOHJADMMGLBMDDODJJMBJEECBKPFLOCBMNBPABGANKBGILFFHDPAIMMBHKCFBFJLLDKLKPHBFDNFALNNBACKDBDFMFFIOLFKINHKOOKJEHJMIAKFLIGEECFGD
-# f5_cspm = IHCEKDFDOHJADMMGLBMDDODJJMBJEECBKPFLOCBMNBPABGANKBGILFFHDPAIMMBHKCFCFJLLAELKPHBFDNFALNNBCHKDBDFMFFIOLFKINHKOOKJEHJMIAKFLIGEECFGD
 
 Response= str
 Responses = List[Response]
@@ -45,7 +44,6 @@ Date = str
 Dates = List[Date]
 Parsed_HTML_tables =Dict[Dates:BeautifulSoup]
 FilteredTables = Dict[Dates:Parsed_HTML_tables] = str
-
 
 class DateRequest:
     pass
