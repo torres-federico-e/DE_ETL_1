@@ -1,5 +1,6 @@
 # Standard
 .DS_Store
+**/__pycache__
 
 # Environment
 .venv
@@ -7,6 +8,9 @@
 # Secrets
 .env.secrets
 .env*
+
+# Folders
+ignored/
 
 # Files
 src/bcra.ipynb
