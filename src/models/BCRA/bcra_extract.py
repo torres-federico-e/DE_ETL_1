@@ -28,9 +28,10 @@ if os.path.exists('../../../src'):
 from datetime import datetime, timedelta
 from typing import List, Dict
 
+from bs4 import BeautifulSoup
 import pandas as pd
 import requests
-from bs4 import BeautifulSoup
+
 
 from src.errors.bcra_errors import DateRequestError
 
@@ -46,10 +47,12 @@ Raw_HTML_Responses = Dict[Date, Raw_HTML]
 Parsed_HTML_tables = Dict[Date, BeautifulSoup]
 
 
+#%% Date handler Class
 class DateRequest:
     pass
 
 
+#%% Extractor Class
 class BCRAExtractor:
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
     currency_code = {'EUR': '98', 'USD':'2'}
