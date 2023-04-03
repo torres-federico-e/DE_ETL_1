@@ -113,7 +113,7 @@ class BCRAExtractor:
             payload = {'moneda': currency_code, 'fecha': date}
             response = requests.post(self.url_endpoint, data=payload)
             # Extend dictionary with new keys content
-            responses = {**responses, date:response}
+            responses = {**responses, date:response.content}
         return responses
 
 
@@ -130,9 +130,9 @@ class BCRATransformer:
     '''Handles RAW HTML response transformation to 
     Structured data for final data target'''
     
-    def __init__(self, html_responses:Dict[Responses], extract_filters = None):
+    def __init__(self, extractor:BCRAExtractor, extract_filters = None):
         self.extract_locators =  {'locator_tag':'table'} if extract_filters is None else extract_filters
-        self.responses = html_responses
+        self.responses = extractor.raw_html
         self.parsed = self.html_parse(self.responses)
         self.tables = self._extract_tables(self.parsed)
         self.dfs = self.html_to_df(self.tables)
