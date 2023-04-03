@@ -183,7 +183,21 @@ class BCRATransformer:
 #%%
 
 if __name__ == '__main__':
-    res = BCRAExtractor('2023-03-01')
+    # extraction dates
+    BCRA_data = BCRAExtractor(None ,'2023-02-01')
+    
+    #TODO: how to make quick Dependency Injection testing object 
+    # BCRA_data = BCRAExtractor(r'C:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\data\bcra\data_raw_bcra_api.html')
+    
+    # # visualization result, single date
+    # BCRA_data.raw_html['2023-02-01']
+    
+    # transformation raw to parsed
+    br = BCRATransformer(BCRA_data)
+
+
+#%%
+
 
     
 #%% USE CASES
