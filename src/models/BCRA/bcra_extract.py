@@ -39,11 +39,12 @@ from src.errors.bcra_errors import DateRequestError
 #%% Class definition
 
 Response= str
-Responses = List[Response]
 Date = str
-Dates = List[Date]
-Parsed_HTML_tables =Dict[Dates:BeautifulSoup]
-FilteredTables = Dict[Dates:Parsed_HTML_tables] = str
+Raw_HTML = str
+
+Raw_HTML_Responses = Dict[Date, Raw_HTML]
+Parsed_HTML_tables = Dict[Date, BeautifulSoup]
+
 
 class DateRequest:
     pass
@@ -73,7 +74,7 @@ class BCRAExtractor:
         if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
             raise DateRequestError
             
-    def is_valid_date_format(self, date = None, start_date = None, end_date = None, datefmt='%Y-%m-%d'):
+    def is_valid_date_format(self, date = None, start_date = None, end_date = None, datefmt='%Y-%m-%d') -> bool:
         '''Validates date format for API. Returns Boolean, True only for Valid requests'''
         try:
             if date:
@@ -88,7 +89,7 @@ class BCRAExtractor:
         return True
 
     
-    def _get_date_list(self, date, start_date, end_date):
+    def _get_date_list(self, date, start_date, end_date) -> List[Date]:
         '''Calculates list of dates if Date Range extraction was specified with
         `start_date` and `end_date` and complying with date format 'YYYY-MM-DD'
         for compatible requests with BCRA API'''
@@ -102,10 +103,10 @@ class BCRAExtractor:
         elif date:
             return [date]
     
-    def extract_dates_rates(self, dates:List[Dates] = None, currency_code=None):
+    def extract_dates_rates(self, dates:List[Date] = None, currency_code=None) -> Dict[Date, Raw_HTML]:
         '''Makes API calls to BCRA API for the listed dates. 
         Returns a Dictionary with dates as keys and responses as values.
-        * Return -> Dict[date:response]'''
+        * Return -> Dict[Date, Raw_HTML]'''
         responses = dict()
         for date in dates:
             # `date`: %Y-%m-%d format already for API request and Dict keys
@@ -127,11 +128,10 @@ class BCRATransformer:
         self.tables = self._extract_tables(self.parsed)
         self.dfs = self.html_to_df(self.tables)
         
-    def html_parse(self, html_responses, encoding:str = 'iso-8859-1', parser:str = 'html.parser'):
-        '''Parses RAW HTMLresponses per date received from Dict with 
-        Dates as keys and Raw Html responses as values.
-        Returns Dict of parsed BeautifulSoup objects
-        with dates as keys for further processing'''
+    def html_parse(self
+                , html_responses:Dict[Date, Raw_HTML]
+                , encoding:str = 'iso-8859-1'
+                , parser:str = 'html.parser') -> Dict[Date, BeautifulSoup]:
         # _parsed = list()
         _parsed = dict()
         for date, response in html_responses.items():            
@@ -142,11 +142,7 @@ class BCRATransformer:
             # _parsed.append(parsed_html)
         return _parsed
 
-    def _extract_tables(self, parsed_html: BeautifulSoup) -> Dict[Dates:Parsed_HTML_tables]: 
-        '''Processes dates and extracts Exchange Rate tables from
-        BeautifulSoup parsed HTML (the actual 'soups' elements)
-        Returns a Dict with dates as keys and list of matching 
-        elements as values'''
+    def _extract_tables(self, parsed_html: BeautifulSoup) -> Dict[Date, Parsed_HTML_tables]: 
         etag = self.extract_locators['tag']
         eid = self.extract_locators['id']
         
@@ -155,7 +151,7 @@ class BCRATransformer:
             result_tables = {**parsed_html, date:rate_table}
         return result_tables
 
-
+    def html_to_df(self, date_tables: Dict[Date, Parsed_HTML_tables]) -> Dict[Date, pd.DataFrame]:
     def html_to_df(self, date_tables: Dict[Dates:Parsed_HTML_tables]):
         '''Process and exports parsed tables to Pandas Dataframe'''
         final = dict()
