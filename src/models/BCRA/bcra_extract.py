@@ -150,9 +150,7 @@ class BCRATransformer:
         # _parsed = list()
         _parsed = dict()
         for date, response in html_responses.items():            
-            response = response.content
-            with open(response, encoding= encoding) as fp:
-                parsed_html = BeautifulSoup(fp.read(), parser)
+            parsed_html = BeautifulSoup(response.decode(encoding=encoding), parser)
             _parsed = {**_parsed, date:parsed_html}
             # _parsed.append(parsed_html)
         return _parsed
