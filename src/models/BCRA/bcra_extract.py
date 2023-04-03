@@ -68,7 +68,7 @@ class BCRAExtractor:
         # self.parsed_HTML = self.HTML_parse(self.response)
 
 
-    
+        
     def is_valid_date_request(self, date = None, start_date = None, end_date = None):
         '''Validates date requests for API. Returns Boolean, True only for Valid requests'''
         if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
@@ -117,6 +117,15 @@ class BCRAExtractor:
         return responses
 
 
+
+
+
+
+
+
+
+
+#%% Transformer Class
 class BCRATransformer:
     '''Handles RAW HTML response transformation to 
     Structured data for final data target'''
@@ -132,6 +141,9 @@ class BCRATransformer:
                 , html_responses:Dict[Date, Raw_HTML]
                 , encoding:str = 'iso-8859-1'
                 , parser:str = 'html.parser') -> Dict[Date, BeautifulSoup]:
+        '''Takes Dict with dates as keys and Raw_HTML as values and
+        parses them into BeautifulSoup objects with 'html.parser' by default.
+        -> returns dict.'''
         # _parsed = list()
         _parsed = dict()
         for date, response in html_responses.items():            
@@ -143,17 +155,19 @@ class BCRATransformer:
         return _parsed
 
     def _extract_tables(self, parsed_html: BeautifulSoup) -> Dict[Date, Parsed_HTML_tables]: 
+        '''Takes parsed BeautifulSoup objects and extracts the Exchange Rate tables.
+        Returns only filtered, matching HTML objects. 
+        returns -> Dict[Date, BeautifulSoup] '''
         etag = self.extract_locators['tag']
         eid = self.extract_locators['id']
-        
         for date, soup in parsed_html.items():
             rate_table = soup.find(etag, {'id':eid})
             result_tables = {**parsed_html, date:rate_table}
         return result_tables
 
     def html_to_df(self, date_tables: Dict[Date, Parsed_HTML_tables]) -> Dict[Date, pd.DataFrame]:
-    def html_to_df(self, date_tables: Dict[Dates:Parsed_HTML_tables]):
-        '''Process and exports parsed tables to Pandas Dataframe'''
+        '''Takes BeautifulSoup parsed tables and transforms to Pandas Dataframe
+        returns -> Dict[Date, Dataframe]'''
         final = dict()
         for date, tables in date_tables.items():
             table_list = []
@@ -162,8 +176,9 @@ class BCRATransformer:
                 table_list.append(_df_table)
             final = {**final, date:table_list}
         return final
-    
-    
+
+
+
 #%%
 
 if __name__ == '__main__':
