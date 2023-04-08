@@ -33,7 +33,7 @@ import pandas as pd
 import requests
 
 
-from src.errors.bcra_errors import DateRequestError
+from src.errors.bcra_errors import InvalidDateRequestError, InvalidDateFormatError
 
 
 
@@ -59,10 +59,15 @@ class BCRAExtractor:
 
     def __init__(self, date = None, start_date = None, end_date = None, locator_tag='table', **attributes):    
         try: 
-            self.is_valid_date_request(date, start_date, end_date)
-            self.is_valid_date_format(date, start_date, end_date)    
-        except Exception as e:
-            print("Error while checking dates")
+            # Extraction validation
+            self._is_valid_date_request(date, start_date, end_date)
+            self._is_valid_date_format(date, start_date, end_date)  
+            
+        except InvalidDateRequestError as e:
+            print("Invalid Date Request {}".format(str(e)))
+            raise e
+        except InvalidDateFormatError  as e:
+            print("Invalid date format: {}".format(str(e)))
             raise e
         
         # Define dates vars safely
@@ -74,11 +79,13 @@ class BCRAExtractor:
         
     def is_valid_date_request(self, date = None, start_date = None, end_date = None):
         '''Validates date requests for API. Returns Boolean, True only for Valid requests'''
+    def _is_valid_date_request(self, date = None, start_date = None, end_date = None):
+        '''Validates date requests for API'''
         if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
-            raise DateRequestError
+            raise InvalidDateRequestError
             
-    def is_valid_date_format(self, date = None, start_date = None, end_date = None, datefmt='%Y-%m-%d') -> bool:
-        '''Validates date format for API. Returns Boolean, True only for Valid requests'''
+    def _is_valid_date_format(self, date = None, start_date = None, end_date = None, datefmt='%Y-%m-%d') -> bool:
+        '''Validates correct date format for API request. Returns-> bool'''
         try:
             if date:
                 datetime.strptime(date, datefmt)
@@ -88,9 +95,7 @@ class BCRAExtractor:
             else:
                 return False
         except ValueError:
-            raise ValueError("Incorrect date specified. Please use format 'YYYY-MM-DD'")
-        return True
-
+            raise InvalidDateFormatError
     
     def _get_date_list(self, date, start_date, end_date) -> List[Date]:
         '''Calculates list of dates if Date Range extraction was specified with
@@ -182,21 +187,43 @@ class BCRATransformer:
 
 #%%
 
-if __name__ == '__main__':
-    # extraction dates
-    BCRA_data = BCRAExtractor(None ,'2023-02-01')
-    
-    #TODO: how to make quick Dependency Injection testing object 
-    # BCRA_data = BCRAExtractor(r'C:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\data\bcra\data_raw_bcra_api.html')
-    
-    # # visualization result, single date
-    # BCRA_data.raw_html['2023-02-01']
-    
-    # transformation raw to parsed
-    br = BCRATransformer(BCRA_data)
+# KeyError                                  Traceback (most recent call last)
+# Cell In[9], line 14
+#     5 BCRA_data = BCRAExtractor(None ,'2023-02-01')
+#     7 #TODO: how to make quick Dependency Injection testing object 
+#     8 # BCRA_data = BCRAExtractor(r'C:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\data\bcra\data_raw_bcra_api.html')
+#     9 
+# (...)
+#     12 
+#     13 # transformation raw to parsed
+# ---> 14 br = BCRATransformer(BCRA_data)
+
+# c:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\models\BCRA\bcra_extract.py in line 10, in BCRATransformer.__init__(self, extractor, extract_filters)
+#     197 self.responses = extractor.raw_html
+#     198 self.parsed = self.html_parse(self.responses)
+# ---> 199 self.tables = self._extract_tables(self.parsed)
+#     200 self.dfs = self.html_to_df(self.tables)
+
+# c:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\models\BCRA\bcra_extract.py in line 32, in BCRATransformer._extract_tables(self, parsed_html)
+#     217 def _extract_tables(self, parsed_html: BeautifulSoup) -> Dict[Date, Parsed_HTML_tables]: 
+#     218     '''Takes parsed BeautifulSoup objects and extracts the Exchange Rate tables.
+#     219     Returns only filtered, matching HTML objects. 
+#     220     returns -> Dict[Date, BeautifulSoup] '''
+# ---> 221     etag = self.extract_locators['tag']
+#     222     eid = self.extract_locators['id']
+#     223     for date, soup in parsed_html.items():
+
+# KeyError: 'tag'
 
 
-#%%
+
+
+
+
+
+
+
+
 
 
     
