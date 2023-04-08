@@ -38,12 +38,11 @@ from src.errors.bcra_errors import InvalidDateRequestError, InvalidDateFormatErr
 
 
 
-#%% Class definition
+#%% Typing aliases
 
 Response= str
 Date = str
 Raw_HTML = str
-
 Raw_HTML_Responses = Dict[Date, Raw_HTML]
 Parsed_HTML_tables = Dict[Date, BeautifulSoup]
 
