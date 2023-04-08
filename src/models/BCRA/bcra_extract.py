@@ -89,11 +89,9 @@ class BCRAExtractor:
         try:
             if date:
                 datetime.strptime(date, datefmt)
-            elif start_date and end_date:
+            if start_date and end_date:
                 datetime.strptime(start_date, datefmt)
                 datetime.strptime(end_date, datefmt)
-            else:
-                return False
         except ValueError:
             raise InvalidDateFormatError
     
