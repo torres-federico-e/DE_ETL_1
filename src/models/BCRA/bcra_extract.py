@@ -27,6 +27,7 @@ if os.path.exists('../../../src'):
 #%% Imports
 from datetime import datetime, timedelta
 from typing import List, Dict
+import yaml
 
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -57,7 +58,9 @@ class BCRAExtractor:
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
     currency_code = {'EUR': '98', 'USD':'2'}
 
-    def __init__(self, date = None, start_date = None, end_date = None, locator_tag='table', **attributes):    
+    def __init__(self, date = None, test_file = None , * , start_date = None, end_date = None
+                ,config_path = 'src\config\ETL_config.yaml', testing_mode = False 
+                ,locator_tag='table', **attributes):    
         try: 
             # Extraction validation
             self._is_valid_date_request(date, start_date, end_date)
@@ -70,15 +73,29 @@ class BCRAExtractor:
             print("Invalid date format: {}".format(str(e)))
             raise e
         
-        # Define dates vars safely
+        self.config = self.load_config_file(config_path)
         self.dates = self._get_date_list(date, start_date, end_date)
-        self.response = self.extract_dates_rates(self.dates, self.currency_code['USD']) 
-        # self.parsed_HTML = self.HTML_parse(self.response)
-
-
         
-    def is_valid_date_request(self, date = None, start_date = None, end_date = None):
-        '''Validates date requests for API. Returns Boolean, True only for Valid requests'''
+        if testing_mode == False:        
+            self.raw_html = self.extract_dates_rates(self.dates, self.currency_code['USD']) 
+        elif testing_mode == True:
+            self.raw_html = self.load_test_file()
+
+
+    def load_config_file(self, config_path):
+        '''Class config file loader'''
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+        return config
+    
+    def load_test_file(self):
+        '''Loads testing mock response'''
+        file_path = self.config.get('BCRA_extraction').get('test_file')
+        with open(file_path, 'rb') as test_file:
+            test_file = test_file.read()
+        mock_response =  {self.dates[0]:test_file}
+        return mock_response
+    
     def _is_valid_date_request(self, date = None, start_date = None, end_date = None):
         '''Validates date requests for API'''
         if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
@@ -123,12 +140,19 @@ class BCRAExtractor:
         return responses
 
 
-
-
-
-
-
-
+if __name__ == '__main__':
+    # extraction dates
+    # ex_1 = BCRAExtractor('2023-02-01', testing_mode=False)
+    ex_test = BCRAExtractor('2023-02-01', testing_mode=True)
+    
+    #TODO: how to make quick Dependency Injection testing object 
+    # BCRA_data = BCRAExtractor(r'src\data\bcra\data_raw_bcra_api.html')
+    
+    # # visualization result, single date
+    # BCRA_data.raw_html['2023-02-01']
+    
+    # transformation raw to parsed
+    # br = BCRATransformer(BCRA_data)
 
 
 #%% Transformer Class
