@@ -2,7 +2,7 @@
 ![BCRA_Entrance](./img/bcra_banner_2_hi_res.jpg "BCRA_Entrance")
 
 #  Financial ETL - BCRA Data Ingestion
-Example of an extensible ETL process with Real-world data recollection. This process extracts and integrates data from the official backend API of Argentina's Central Bank institution (BCRA), an unexposed API source allowing easy collection and access of otherwise unaccessible data. The project demonstrates the extraction and integration of useful data from diverse financial sources into a valid schema and posterior storage into a database system.
+Example of an extensible ETL process with Real-world data recollection. This process extracts and integrates data from the official backend API of Argentina's Central Bank institution (BCRA), an unexposed API source allowing easy collection and access of otherwise unaccessible data. The project intends to demonstrate the extraction and integration of useful data-sources from diverse financial institutions into a valid schema and posterior storage into a database system.
 
 ## Objective:
 - Extract official exchange rate data from an official backend government API for ARS/USD. 
@@ -30,7 +30,7 @@ The Central Bank of Argentina has access to a network of banks systems from whic
 
 The report is served as Public information on BCRA's web page following a request. Can be accesed online through a Web Browser and rendered on Tables with no easy export solution or support. 
 
-We are going to Scrape and integrate such source so that is is available in our database directly from the BCRA, leveragin it's interbank network in order to get Daily Exchange rate prices from all the Argentinian banks in the network, ingest that into a Database Datawarehouse solution, allowing posterior analytics, such as "which is the bank with the lowest Exchange Rate price" or "How fast has the Exchange rate being evolving over time per Banking institution" which is somehting not usually available if not from this source.
+We are going to web-scrape and integrate such source so that is is available in our database directly from the BCRA, leveragin it's interbank network in order to get Daily Exchange rate prices from all the Argentinian banks in the network, ingest that into a Database Datawarehouse solution, allowing posterior analytics, such as "which is the bank with the lowest Exchange Rate price" or "How fast has the Exchange rate being evolving over time per Banking institution" which is somehting not usually available if not from this source.
 
 
 <br>
@@ -39,7 +39,7 @@ We are going to Scrape and integrate such source so that is is available in our 
 The information is served once per request in an unaccessible way, a HTML web page with multiple tables with Exchange rate data with different uses. 
 The format also contains Multi-level hierachical columns which make the processing of the source object more difficult to be actually resilient.  
 We are going to automate the request-making, and parse all information into appropiate data-structures and schedule this into an ETL job 
-in order to get this to target database in a easy, resilient, user-friendly and reapetible way.
+in order to get this to target database in a easy, resilient, user-friendly and repetible way.
 
 ## <u> _Exchange Rate Table source:_</u>  
 
