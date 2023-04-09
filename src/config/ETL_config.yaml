@@ -1,0 +1,2 @@
+BCRA_extraction:
+  test_file:  'src\data\bcra\raw_html_output.html'
