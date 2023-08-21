@@ -2,18 +2,19 @@
 ![BCRA_Entrance](./img/bcra_banner_2_hi_res.jpg "BCRA_Entrance")
 
 #  Financial ETL - BCRA Data Ingestion
-Example of an extensible ETL process with Real-world data recollection. This process extracts and integrates data from the official backend API of Argentina's Central Bank institution (BCRA), an unexposed API source allowing easy collection and access of otherwise unaccessible data. The project intends to demonstrate the extraction and integration of useful data-sources from diverse financial institutions into a valid schema and posterior storage into a database system.
+Example of an extensible ETL process with Real-world data recollection. This process extracts and integrates data from the backend API of Argentina's Central Bank institution (BCRA), a real-world production API source allowing easy collection and access of otherwise unaccessible data. The project intends to demonstrate the extraction and integration of useful data-sources from diverse API's or internet sources into valid schemas, and final storage into database systems.
 
 ## Objective:
-- Extract official exchange rate data from an official backend government API for ARS/USD. 
-- Transform, parse, and clean data, makint it ready for storage. 
-- Integrate and embed it with other financial data sources form brokers, into a coherent dataset and schema.
-- Loading data onto persistence layer, a local database (with possible future extension to Cloud storage).  
+- Extract official raw data from a production API from Argentina's Central Bank for ARS/USD exchange rate data. 
+- Parse, clean and fit data into proper re-usable classes and structures. 
+- Transform and make it ready for internal storage and consumption in final Model. 
+- Make it extensible and integrate it with other financial data sources from brokers, into a coherent dataset and schema.
+- Load data into a local database for demostration (with possibility to extend to Cloud storage in the future).  
 
 ## Nice Features
-- Extraction from unexposed API: The project leverages a real-world API from the BCRA National reporting website for data extraction. This allows access to data that is not publicly available through other means.  
+- Extraction from production web API: The project leverages a real-world web API from the BCRA for data extraction. This allows programmatic access to data that would not be available through other means.  
 
-- Rich HTML extraction: Use of Python Multi-level Hierarchical Dataframes and custom extraction classes to easily extract raw HTML data from official BCRA website API. This also allows easy psoterior data manipulation and organization, supporting reusability by other team-members (abstracting complex complex table data parsing and supporting `stack()` and `unstack()` methods for data simplicity).
+- Rich HTML extraction and manipulation: Through HTML table parsing and Pandas Multi-level Dataframes implementation we support custom extraction classes to easily manipulate raw HTML data from official BCRA website API and re-use in case necessary. This also allows easy posterior data manipulation and organization, supporting reusability by other team-members (abstracting complex complex table data parsing and supporting `stack()` and `unstack()` methods for data simplicity).
 
 - Data transformation: The extracted data is transformed into appropriate schema data types using Pydantic. This helps to enforce data integrity and ensure that the data is usable for downstream processing.The extracted data is also cleaned and formatted for further processing.  
 
@@ -26,7 +27,7 @@ Example of an extensible ETL process with Real-world data recollection. This pro
 
 Having access to Financial data from an such an Original public source can be really useful. More so in such a volatile economy like the one of Argentina, where the US Dollar Exchange Rate is important asset both bussiness and market desitions of companies and minorist interest. Having access to near real time exchange rates from an original source it's key in such scenarios. 
 
-The Central Bank of Argentina has access to a network of banks systems from which it regularly retrieves sample exchange rate information at regular intervals intervals (11hs, 13hs, 15hs) from every financial baking institution available. All these information then gets published regularly on a daily report. 
+The Central Bank of Argentina has access to a network of banks systems from which it regularly retrieves sample exchange rate information at regular intervals intervals (11hs, 13hs, 15hs) from every financial baking institution available. All this information then gets published regularly on a daily report. 
 
 The report is served as Public information on BCRA's web page following a request. Can be accesed online through a Web Browser and rendered on Tables with no easy export solution or support. 
 
