@@ -47,18 +47,23 @@ Raw_HTML_Responses = Dict[Date, Raw_HTML]
 Parsed_HTML_tables = Dict[Date, BeautifulSoup]
 
 
-#%% Date handler Class
-class DateRequest:
+#%% Date processor class
+class DateProcessor:
+    '''Date processor class, handles interpretation, generation of calendar dates lists, and date lists export'''
     pass
 
 
 #%% Extractor Class
 class BCRAExtractor:
+    '''Processor class, handles requestss to BCRA API for specified dates.'''
+
+    # Official BCRA Endpoint
     url_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
+    # Accepted Currencies
     currency_code = {'EUR': '98', 'USD':'2'}
 
     def __init__(self, date = None, test_file = None , * , start_date = None, end_date = None
-                ,config_path = 'src\config\ETL_config.yaml', testing_mode = False 
+                ,config_path = 'src\config\ETL_config.yaml', mock = False 
                 ,locator_tag='table', **attributes):    
         try: 
             # Extraction validation
@@ -74,11 +79,7 @@ class BCRAExtractor:
         
         self.config = self.load_config_file(config_path)
         self.dates = self._get_date_list(date, start_date, end_date)
-        
-        if testing_mode == False:        
-            self.raw_html = self.extract_dates_rates(self.dates, self.currency_code['USD']) 
-        elif testing_mode == True:
-            self.raw_html = self.load_test_file()
+        self.raw_html = self.get_html_reponse(self.dates, self.currency_code['USD']) 
 
 
     def load_config_file(self, config_path):
@@ -87,7 +88,7 @@ class BCRAExtractor:
             config = yaml.safe_load(f)
         return config
     
-    def load_test_file(self):
+    def load_mock_response(self):
         '''Loads testing mock response'''
         file_path = self.config.get('BCRA_extraction').get('test_file')
         with open(file_path, 'rb') as test_file:
@@ -125,10 +126,19 @@ class BCRAExtractor:
         elif date:
             return [date]
     
-    def extract_dates_rates(self, dates:List[Date] = None, currency_code=None) -> Dict[Date, Raw_HTML]:
+    def get_html_reponse(self, dates:List[Date] = None, currency_code=None) -> Dict[Date, Raw_HTML]:
+        if self.mock == False:        
+            responses = self.extract_exchange_rates(dates, currency_code)
+        elif self.mock == True:
+            mock_response = self.raw_html = self.load_mock_response()
+            responses = mock_response if 'mock_response' in locals() else responses
+        return responses
+    
+    def extract_exchange_rates(self, dates:List[Date], currency_code=None)-> Dict[Date, Raw_HTML]:
         '''Makes API calls to BCRA API for the listed dates. 
         Returns a Dictionary with dates as keys and responses as values.
-        * Return -> Dict[Date, Raw_HTML]'''
+        * Return -> Dict[Date, Raw_HTML]
+        '''
         responses = dict()
         for date in dates:
             # `date`: %Y-%m-%d format already for API request and Dict keys
@@ -140,24 +150,15 @@ class BCRAExtractor:
 
 
 if __name__ == '__main__':
-    # extraction dates
-    # ex_1 = BCRAExtractor('2023-02-01', testing_mode=False)
-    ex_test = BCRAExtractor('2023-02-01', testing_mode=True)
+    # Real Extraction Demo
+    ex_test = BCRAExtractor('2023-02-01', mock=True)
     
-    #TODO: how to make quick Dependency Injection testing object 
-    # BCRA_data = BCRAExtractor(r'src\data\bcra\data_raw_bcra_api.html')
-    
-    # # visualization result, single date
-    # BCRA_data.raw_html['2023-02-01']
-    
-    # transformation raw to parsed
-    # br = BCRATransformer(BCRA_data)
 
 
 #%% Transformer Class
 class BCRATransformer:
-    '''Handles RAW HTML response transformation to 
-    Structured data for final data target'''
+    '''Handles transormation between RAW HTML to 
+    Structured data for final target'''
     
     def __init__(self, extractor:BCRAExtractor, extract_filters = None):
         self.extract_locators =  {'locator_tag':'table'} if extract_filters is None else extract_filters
@@ -204,37 +205,6 @@ class BCRATransformer:
             final = {**final, date:table_list}
         return final
 
-
-
-#%%
-
-# KeyError                                  Traceback (most recent call last)
-# Cell In[9], line 14
-#     5 BCRA_data = BCRAExtractor(None ,'2023-02-01')
-#     7 #TODO: how to make quick Dependency Injection testing object 
-#     8 # BCRA_data = BCRAExtractor(r'C:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\data\bcra\data_raw_bcra_api.html')
-#     9 
-# (...)
-#     12 
-#     13 # transformation raw to parsed
-# ---> 14 br = BCRATransformer(BCRA_data)
-
-# c:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\models\BCRA\bcra_extract.py in line 10, in BCRATransformer.__init__(self, extractor, extract_filters)
-#     197 self.responses = extractor.raw_html
-#     198 self.parsed = self.html_parse(self.responses)
-# ---> 199 self.tables = self._extract_tables(self.parsed)
-#     200 self.dfs = self.html_to_df(self.tables)
-
-# c:\Users\tfede\OneDrive\Desktop\DE_ETL_1\src\models\BCRA\bcra_extract.py in line 32, in BCRATransformer._extract_tables(self, parsed_html)
-#     217 def _extract_tables(self, parsed_html: BeautifulSoup) -> Dict[Date, Parsed_HTML_tables]: 
-#     218     '''Takes parsed BeautifulSoup objects and extracts the Exchange Rate tables.
-#     219     Returns only filtered, matching HTML objects. 
-#     220     returns -> Dict[Date, BeautifulSoup] '''
-# ---> 221     etag = self.extract_locators['tag']
-#     222     eid = self.extract_locators['id']
-#     223     for date, soup in parsed_html.items():
-
-# KeyError: 'tag'
 
 
 
