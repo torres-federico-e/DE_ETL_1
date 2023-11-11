@@ -12,6 +12,7 @@
 # Folders
 ignored/
 
-# Files
+# Project Files
+EXTRACTION.html
 src/bcra.ipynb
 structure.md

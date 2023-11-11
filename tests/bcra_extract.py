@@ -47,6 +47,6 @@ if __name__ == '__main__':
     response = BCRAExtractor(test_file=r'C:\Users\Federico\Desktop\DE_ETL_1\src\data\BCRA\responses\mock_data_raw_1.html')
     print(response)
     
-    export_name = f'EXTRACTED_DATE_{date}.html'
+    export_name = f'EXTRACTION.html'
     with open(export_name, 'wb') as file:
         file.write(response[date])
