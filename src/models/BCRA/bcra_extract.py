@@ -87,16 +87,15 @@ class BCRAExtractor:
                      'USD':'2'
                      }
 
-    def __init__(self, start_date = None, end_date = None, date = None, test_file = None 
+    def __init__(self, date = None, start_date = None, end_date = None, test_file = None 
                  , * ,config_file = None, locator_tag='table', **attributes):    
-        self.start_date = start_date
-        self.end_date = end_date
-        self.date = date 
+        # self.date_range = DateProcessor(date=date, start_date=start_date, end_date=end_date)
+        self.date_range = None
         self.test_file = test_file
         self.locator_tag = locator_tag
-        self.data = self.process_HTML_extraction() 
+        self.data = self.get_HTML_extraction() 
 
-    def process_HTML_extraction(self) -> Dict[Date, Raw_HTML]:
+    def get_HTML_extraction(self) -> Dict[Date, Raw_HTML]:
         '''Get HTML response from configuration, BCRA API or
          local test_file for testing '''
         if self.test_file is not None:
@@ -104,7 +103,9 @@ class BCRAExtractor:
             responses = self.get_from_test_file()
         elif self.test_file is None:
             # Process Dates
-            self.date_range = DateProcessor(date=self.date, start_date=self.start_date, end_date=self.end_date).date_range
+            self.date_range = DateProcessor(start_date = self.start_date, 
+                                            end_date = self.end_date, 
+                                            date = self.date).date_range
             responses = self.get_API_rates(self.date_range, self.currency_code) 
         return responses
     
@@ -131,9 +132,9 @@ class BCRAExtractor:
         test_response =  {default_date:test_file}
         return test_response
     
-    def load_config_file(self, config_path):
+    def load_config_file(self, config_file):
         '''Class config file loader'''
-        with open(config_path) as f:
+        with open(config_file) as f:
             config = yaml.safe_load(f)
         return config
 
