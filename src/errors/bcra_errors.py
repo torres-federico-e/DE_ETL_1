@@ -4,11 +4,9 @@
 
 class InvalidDateRequestError(Exception):
     def __str__(self):
-        return '''Inconsistent date extraction request. 
-Please choose either a Single date request, or a Date Range request using `start_date` and `end_date`.'''
+        return '''Choose either a Date Range or a Single date for the request with  `start_date`, `end_date`, or `date` parameters.'''
 
 class InvalidDateFormatError(Exception):
     def __str__(self):
-        return '''Invalid date format for API request.
-Please use valid 'YYYY-MM-DD' (ISO8601) format dates.'''
+        return '''Invalid date format for API request. Please use valid (ISO8601) 'YYYY-MM-DD' format dates.'''
 
