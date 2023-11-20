@@ -25,29 +25,35 @@ Parsed_HTML_tables = Dict[Date, BeautifulSoup]
 #%% Date processor class
 class DateProcessor:
     '''Processor class, handles date interpretation, validation and generation of calendar ranges'''
-    def __init__(self, start_date=None, end_date=None, date=None):
+
+    def __init__(self, *, start_date=None, end_date=None, date=None):
+        # validation checks
         self._is_valid_date(start_date, end_date, date)
         self._is_valid_request(start_date, end_date, date)
+        # definitions
         self.start_date = start_date
         self.end_date = end_date
         self.date = date
         self.date_range = self.get_date_range(self.start_date, self.end_date, self.date)
     
     def _is_valid_request(self, start_date = None, end_date = None, date = None, ):
-        '''Checks consistent requests. Single date or date range, but not both'''
-        if (date and (start_date or end_date )) or (not date and not (start_date and end_date)):
+        '''Checks consistent request initialization. Single date or date range, but not both'''
+        if (date and (start_date or end_date )):
             raise InvalidDateRequestError
+        else: 
+            pass
             
     def _is_valid_date(self, start_date = None, end_date = None, date = None, datefmt='%Y-%m-%d') -> bool:
         '''Checks valid date string format.'''
         try:
             for dt in [date, start_date, end_date]:
-                datetime.strptime(dt, datefmt)
+                if dt is not None:
+                    datetime.strptime(dt, datefmt)
         except ValueError:
             raise InvalidDateFormatError
         
     @staticmethod
-    def get_date_range(start_date, end_date, date) -> List[Date]:
+    def get_date_range(start_date=None, end_date=None, date=None) -> List[Date]:
         '''Calculates calendar list of dates for Date Range provided. 
         If `date` was provided, takes precedence and overrides date range calculation.
         Returns BCRA API compatible 'YYYY-MM-DD'date format list.'''
@@ -115,14 +121,14 @@ class BCRAExtractor:
         return responses
 
     def get_from_test_file(self):
-        '''Loads test file as extraction response'''
+        '''Loads default test extraction from local file'''
         try: 
             with open(self.test_file, 'rb') as test_file:
                 test_file = test_file.read()
         except FileNotFoundError as e:
             raise e.add_note("Provided Test file Does not Exist")
-        date = self.get_date_range()
-        test_response =  {date:test_file}
+        default_date = DateProcessor().get_date_range()[0] 
+        test_response =  {default_date:test_file}
         return test_response
     
     def load_config_file(self, config_path):
