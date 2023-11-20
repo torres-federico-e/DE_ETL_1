@@ -82,15 +82,18 @@ class BCRAExtractor:
     default_api_endpoint = 'https://www.bcra.gob.ar/publicacionesestadisticas/Tipo_de_cambio_minorista_2.asp'
     
     # Supported Currencies
-    currency_code = {
+    currency_dict = {
                      'EUR': '98', 
                      'USD':'2'
                      }
 
-    def __init__(self, date = None, start_date = None, end_date = None, test_file = None 
-                 , * ,config_file = None, locator_tag='table', **attributes):    
-        # self.date_range = DateProcessor(date=date, start_date=start_date, end_date=end_date)
+    def __init__(self, date = None, start_date = None, end_date = None, currency= 'USD',
+                 locator_tag='table', test_file = None , * ,config_file = None, **attributes):    
+        self.currency = currency
         self.date_range = None
+        self.start_date = start_date
+        self.end_date = end_date
+        self.date = date
         self.test_file = test_file
         self.locator_tag = locator_tag
         self.data = self.get_HTML_extraction() 
@@ -106,20 +109,20 @@ class BCRAExtractor:
             self.date_range = DateProcessor(start_date = self.start_date, 
                                             end_date = self.end_date, 
                                             date = self.date).date_range
-            responses = self.get_API_rates(self.date_range, self.currency_code) 
+            responses = self.get_API_rates(self.date_range, self.currency) 
         return responses
     
     @classmethod
-    def get_API_rates(cls, dates:List[Date], currency_code=None)-> Dict[Date, Raw_HTML]:
-        '''GET request to BCRA API for specific list of dates.
+    def get_API_rates(cls, dates:List[Date], currency_code='USD')-> Dict[Date, Raw_HTML]:
+        '''Makes requests to BCRA API extracting currency data for dates.
         Returns dictionary, dates as keys, raw response as values. '''
-        responses = dict()
+        result = dict()
         for date in dates:
             # `date`: %Y-%m-%d format already for API request and Dict keys
-            payload = {'moneda': currency_code, 'fecha': date}
+            payload = {'moneda': cls.currency_dict[currency_code], 'fecha': date}
             response = requests.post(cls.default_api_endpoint, data=payload)
-            responses = responses.update({date:response.content})
-        return responses
+            result.update({date:response.content})
+        return result
 
     def get_from_test_file(self):
         '''Loads default test extraction from local file'''
