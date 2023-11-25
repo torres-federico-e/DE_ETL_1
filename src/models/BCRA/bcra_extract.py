@@ -23,28 +23,32 @@ Parsed_HTML_tables = Dict[Date, BeautifulSoup]
 
 
 #%% Date processor class
-class DateProcessor:
-    '''Processor class, handles date interpretation, validation and generation of calendar ranges'''
+class DateRequest:
+    '''Date Processor: handles date request interpretation, validation and parsing, and processes calendar date range'''
 
     def __init__(self, *, start_date=None, end_date=None, date=None):
         # validation checks
         self._is_valid_date(start_date, end_date, date)
         self._is_valid_request(start_date, end_date, date)
+
         # definitions
         self.start_date = start_date
         self.end_date = end_date
         self.date = date
-        self.date_range = self.get_date_range(self.start_date, self.end_date, self.date)
+        self.range = self.get_calendar_range_list(
+            start_date=self.start_date
+            , end_date=self.end_date
+            , date=self.date)
     
     def _is_valid_request(self, start_date = None, end_date = None, date = None, ):
-        '''Checks consistent request initialization. Single date or date range, but not both'''
+        '''Checks for consistent date request mode. Single date or date range, but not both'''
         if (date and (start_date or end_date )):
             raise InvalidDateRequestError
         else: 
             pass
             
     def _is_valid_date(self, start_date = None, end_date = None, date = None, datefmt='%Y-%m-%d') -> bool:
-        '''Checks valid date string format.'''
+        '''Checks for valid string format.'''
         try:
             for dt in [date, start_date, end_date]:
                 if dt is not None:
@@ -53,10 +57,11 @@ class DateProcessor:
             raise InvalidDateFormatError
         
     @staticmethod
-    def get_date_range(start_date=None, end_date=None, date=None) -> List[Date]:
-        '''Calculates calendar list of dates for Date Range provided. 
-        If `date` was provided, takes precedence and overrides date range calculation.
-        Returns BCRA API compatible 'YYYY-MM-DD'date format list.'''
+    def get_calendar_range_list(start_date=None, end_date=None, date=None) -> List[Date]:
+        '''Exports calendar list for a valid Date Range request.
+        If single date mode is passed, overrides date range calculation.
+        String date format is 'YYYY-MM-DD' BCRA API compatible '''
+
         datefmt = '%Y-%m-%d'
         if date: 
             return [date]
@@ -69,6 +74,10 @@ class DateProcessor:
         else: 
             return ['1970-01-01']
             
+
+
+    
+
 
 
     
@@ -106,9 +115,9 @@ class BCRAExtractor:
             responses = self.get_from_test_file()
         elif self.test_file is None:
             # Process Dates
-            self.date_range = DateProcessor(start_date = self.start_date, 
+            self.date_range = DateRequest(start_date = self.start_date, 
                                             end_date = self.end_date, 
-                                            date = self.date).date_range
+                                            date = self.date).range
             responses = self.get_API_rates(self.date_range, self.currency) 
         return responses
     
@@ -131,7 +140,7 @@ class BCRAExtractor:
                 test_file = test_file.read()
         except FileNotFoundError as e:
             raise e.add_note("Provided Test file Does not Exist")
-        default_date = DateProcessor().get_date_range()[0] 
+        default_date = DateRequest().get_calendar_date_range_list()[0] 
         test_response =  {default_date:test_file}
         return test_response
     
@@ -147,16 +156,18 @@ class BCRAExtractor:
 
 
     
-#%% Quickstart - Demo
-##################################
 
 if __name__ == '__main__':
 
+    # Quickstart - Demo
+    #---------------------------------------------
     # Extract single date
     single = BCRAExtractor(date='2023-03-01') 
+    
     # Extract date range
     range_ = BCRAExtractor(start_date='2023-02-01', end_date='2023-02-28')
-    # extract and filter
+    
+    # Extract and filter by attribute
     filter_ = BCRAExtractor(date='2023-03-01', locator_tag='table', attr_filter={'id':'tablita'})
 
 
