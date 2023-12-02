@@ -2,7 +2,8 @@
 ![BCRA_Entrance](./img/bcra_banner_2_hi_res.jpg "BCRA_Entrance")
 
 #  Financial ETL - BCRA Data Ingestion
-Example of an extensible ETL process with Real-world data recollection. This process extracts and integrates data from the backend API of Argentina's Central Bank institution (BCRA), a real-world production API source allowing easy collection and access of otherwise unaccessible data. The project intends to demonstrate the extraction and integration of useful data-sources from diverse API's or internet sources into valid schemas, and final storage into database systems.
+
+ Real-world Finacial data recollection from API sources and unstructured data processing. ETL process with custom classes that couples perfectly with Argentina's Central Bank raw backend API to provide integration capabilities and facilitate ingestion processes of unstructured data from external sources anda an unaccessible public database. 
 
 ## Objective:
 - Extract official raw data from a production API from Argentina's Central Bank for ARS/USD exchange rate data. 
@@ -12,7 +13,7 @@ Example of an extensible ETL process with Real-world data recollection. This pro
 - Load data into a local database for demostration (with possibility to extend to Cloud storage in the future).  
 
 ## Nice Features
-- Extraction from production web API: The project leverages a real-world web API from the BCRA for data extraction. This allows programmatic access to data that would not be available through other means.  
+- The project leverages a real-world web API from the BCRA for data extraction. This allows programmatic access to data that would not be available through other means.  
 
 - Rich HTML extraction and manipulation: Through HTML table parsing and Pandas Multi-level Dataframes implementation we support custom extraction classes to easily manipulate raw HTML data from official BCRA website API and re-use in case necessary. This also allows easy posterior data manipulation and organization, supporting reusability by other team-members (abstracting complex complex table data parsing and supporting `stack()` and `unstack()` methods for data simplicity).
 
