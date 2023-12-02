@@ -55,24 +55,27 @@ class DateRequest:
                     datetime.strptime(dt, datefmt)
         except ValueError:
             raise InvalidDateFormatError
-        
+
+
     @staticmethod
     def get_calendar_range_list(start_date=None, end_date=None, date=None) -> List[Date]:
         '''Exports calendar list for a valid Date Range request.
         If single date mode is passed, overrides date range calculation.
         String date format is 'YYYY-MM-DD' BCRA API compatible '''
+        input_date_fmt = '%Y-%m-%d'
+        output_date_fmt = '%d/%m/%Y'
 
-        datefmt = '%Y-%m-%d'
         if date: 
+            date = datetime.strptime(date, input_date_fmt).__format__(output_date_fmt)
             return [date]
         elif (start_date is not None and end_date is not None):
-            start_date = datetime.strptime(start_date, datefmt)
-            end_date = datetime.strptime(end_date, datefmt)
-            dates = [datetime.strftime(start_date + timedelta(days=i), datefmt)
+            start_date = datetime.strptime(start_date, input_date_fmt)
+            end_date = datetime.strptime(end_date, input_date_fmt)
+            dates = [datetime.strftime(start_date + timedelta(days=i), output_date_fmt)
                         for i in range((end_date - start_date).days + 1)]
             return dates
         else: 
-            return ['1970-01-01']
+            return ['01/01/1970']
             
 
 
@@ -128,7 +131,7 @@ class BCRAExtractor:
         result = dict()
         for date in dates:
             # `date`: %Y-%m-%d format already for API request and Dict keys
-            payload = {'moneda': cls.currency_dict[currency_code], 'fecha': date}
+            payload = {'moneda': cls.currency_dict[currency_code], 'fecha': date, 'B1':'Enviar'}
             response = requests.post(cls.default_api_endpoint, data=payload)
             result.update({date:response.content})
         return result
@@ -155,19 +158,22 @@ class BCRAExtractor:
  
 
 
-    
 
 if __name__ == '__main__':
 
     # Quickstart - Demo
     #---------------------------------------------
     # Extract single date
-    single = BCRAExtractor(date='2023-03-01') 
+    # single = BCRAExtractor(date='2023-03-01') 
     
-    # Extract date range
-    range_ = BCRAExtractor(start_date='2023-02-01', end_date='2023-02-28')
+    # # Extract date range
+    # range_ = BCRAExtractor(start_date='2023-02-01', end_date='2023-02-28')
     
-    # Extract and filter by attribute
-    filter_ = BCRAExtractor(date='2023-03-01', locator_tag='table', attr_filter={'id':'tablita'})
+    # # Extract and filter by attribute
+    # filter_ = BCRAExtractor(date='2023-03-01', locator_tag='table', attr_filter={'id':'tablita'})
+
+    DateRequest.get_calendar_range_list(start_date='2023-11-21', end_date='2023-11-23')
+
+
 
 
