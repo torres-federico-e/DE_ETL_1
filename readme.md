@@ -24,18 +24,6 @@
 - Custom exceptions and error messages: Custom exception and descriptive error messages, making it easier for developers to collaborate and reuse code. This helps to improve code quality and reduce development time.
 
 
-## Introduction: Use case
-
-Having access to Financial data from an such an Original public source can be really useful. More so in such a volatile economy like the one of Argentina, where the US Dollar Exchange Rate is important asset both bussiness and market desitions of companies and minorist interest. Having access to near real time exchange rates from an original source it's key in such scenarios. 
-
-The Central Bank of Argentina has access to a network of banks systems from which it regularly retrieves sample exchange rate information at regular intervals intervals (11hs, 13hs, 15hs) from every financial baking institution available. All this information then gets published regularly on a daily report. 
-
-The report is served as Public information on BCRA's web page following a request. Can be accesed online through a Web Browser and rendered on Tables with no easy export solution or support. 
-
-We are going to web-scrape and integrate such source so that is is available in our database directly from the BCRA, leveragin it's interbank network in order to get Daily Exchange rate prices from all the Argentinian banks in the network, ingest that into a Database Datawarehouse solution, allowing posterior analytics, such as "which is the bank with the lowest Exchange Rate price" or "How fast has the Exchange rate being evolving over time per Banking institution" which is somehting not usually available if not from this source.
-
-
-<br>
 
 #  Web Page - Exchange rate information -  Raw Data:     
 The information is served once per request in an unaccessible way, a HTML web page with multiple tables with Exchange rate data with different uses. 
