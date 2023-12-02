@@ -31,7 +31,7 @@ class BCRATransformer:
     
     def __init__(self, extractor:BCRAExtractor, extract_filters = None):
         self.extract_locators =  {'locator_tag':'table'} if extract_filters is None else extract_filters
-        self.responses = extractor.data
+        self.responses = extractor.result
         self.parsed = self.html_parse(self.responses)
         self.tables = self._extract_tables(self.parsed)
         self.dfs = self.html_to_df(self.tables)
