@@ -97,15 +97,15 @@ class BCRAExtractor:
                      }
 
     def __init__(self, date = None, start_date = None, end_date = None, currency= 'USD',
-                 locator_tag='table', test_file = None , * ,config_file = None, **attributes):    
-        self.currency = currency
-        self.date_range = None
+                 locator_tag='table', file_path = None , * ,config_file = None, **attributes):    
+        self.request_date_range = None
+        self.request_currency = currency
         self.start_date = start_date
         self.end_date = end_date
         self.date = date
-        self.test_file = test_file
-        self.locator_tag = locator_tag
-        self.data = self.get_HTML_extraction() 
+        self.test_file = file_path
+        self.extractor_locator_tag = locator_tag
+        self.result = self.get_HTML_extraction() 
 
     def get_HTML_extraction(self) -> Dict[Date, Raw_HTML]:
         '''Get HTML response from configuration, BCRA API or
@@ -115,10 +115,10 @@ class BCRAExtractor:
             responses = self.get_from_test_file()
         elif self.test_file is None:
             # Process Dates
-            self.date_range = DateRequest(start_date = self.start_date, 
+            self.request_date_range = DateRequest(start_date = self.start_date, 
                                             end_date = self.end_date, 
                                             date = self.date).range
-            responses = self.get_API_rates(self.date_range, self.currency) 
+            responses = self.get_API_rates(self.request_date_range, self.request_currency) 
         return responses
     
     @classmethod
@@ -140,7 +140,7 @@ class BCRAExtractor:
                 test_file = test_file.read()
         except FileNotFoundError as e:
             raise e.add_note("Provided Test file Does not Exist")
-        default_date = DateRequest().get_calendar_date_range_list()[0] 
+        default_date = DateRequest().get_calendar_range_list()[0] 
         test_response =  {default_date:test_file}
         return test_response
     
